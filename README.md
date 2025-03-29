@@ -5,6 +5,7 @@ full project using **Azure Resource Manager (ARM) templates**, including the **c
 Search for ALL Services | ARM 
 
 Tip: Update Networkk Interfacing Card myNIC, myVnet , mySubnet, Region - East US 
+Enter VM Password >> Password0@5
 
 ## **Project Overview**
 ### **Objective:**
