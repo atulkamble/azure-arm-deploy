@@ -108,6 +108,18 @@ Create a **JSON** file named **`azure-deploy.json`**.
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*"
             }
+ {
+            "name": "AllowHTTP",
+            "properties": {
+              "priority": 1001,
+              "protocol": "Tcp",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourcePortRange": "*",
+              "destinationPortRange": "80",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*"
+            }
           }
         ]
       }
