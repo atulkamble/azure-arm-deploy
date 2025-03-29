@@ -2,6 +2,8 @@ full project using **Azure Resource Manager (ARM) templates**, including the **c
 
 ---
 
+Search for ALL Services | ARM 
+
 Tip: Update Networkk Interfacing Card myNIC, myVnet , mySubnet, Region - East US 
 
 ## **Project Overview**
