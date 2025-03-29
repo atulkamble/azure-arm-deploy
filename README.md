@@ -2,6 +2,8 @@ full project using **Azure Resource Manager (ARM) templates**, including the **c
 
 ---
 
+Tip: Update Networkk Interfacing Card myNIC, myVnet , mySubnet, Region - East US 
+
 ## **Project Overview**
 ### **Objective:**
 Deploy an **Azure Virtual Network (VNet) and Virtual Machine (VM)** using an ARM template.
