@@ -1,135 +1,107 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "location": {
-      "type": "string",
-      "defaultValue": "East US",
-      "metadata": {
-        "description": "Location for resources"
-      }
-    },
-    "adminUsername": {
-      "type": "string",
-      "defaultValue": "azureuser",
-      "metadata": {
-        "description": "Admin username for VM"
-      }
-    },
-    "adminPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Admin password for VM"
-      }
-    }
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2021-05-01",
-      "name": "myVNet",
-      "location": "[parameters('location')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": ["10.0.0.0/16"]
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_simple_vm_name": {
+            "defaultValue": "simple-vm",
+            "type": "String"
         },
-        "subnets": [
-          {
-            "name": "mySubnet",
-            "properties": {
-              "addressPrefix": "10.0.1.0/24"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Network/publicIPAddresses",
-      "apiVersion": "2021-05-01",
-      "name": "myPublicIP",
-      "location": "[parameters('location')]",
-      "properties": {
-        "publicIPAllocationMethod": "Dynamic"
-      }
-    },
-    {
-      "type": "Microsoft.Network/networkSecurityGroups",
-      "apiVersion": "2021-05-01",
-      "name": "myNSG",
-      "location": "[parameters('location')]",
-      "properties": {
-        "securityRules": [
-          {
-            "name": "AllowRDP",
-            "properties": {
-              "priority": 1000,
-              "protocol": "Tcp",
-              "access": "Allow",
-              "direction": "Inbound",
-              "sourcePortRange": "*",
-              "destinationPortRange": "3389",
-              "sourceAddressPrefix": "*",
-              "destinationAddressPrefix": "*"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Network/networkInterfaces",
-      "apiVersion": "2021-05-01",
-      "name": "myNIC",
-      "location": "[parameters('location')]",
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Dynamic",
-              "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'myVNet', 'mySubnet')]"
-              },
-              "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'myPublicIP')]"
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Compute/virtualMachines",
-      "apiVersion": "2021-07-01",
-      "name": "myVM",
-      "location": "[parameters('location')]",
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "Standard_B1s"
+        "disks_simple_vm_OsDisk_1_aab1f024a6dc42aab4ea57395238018f_externalid": {
+            "defaultValue": "/subscriptions/cc57cd42-dede-4674-b810-a0fbde41504a/resourceGroups/myRG/providers/Microsoft.Compute/disks/simple-vm_OsDisk_1_aab1f024a6dc42aab4ea57395238018f",
+            "type": "String"
         },
-        "osProfile": {
-          "computerName": "myVM",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
+        "disks_simple_vm_disk2_bd5d55bf385744c991218e690e35df13_externalid": {
+            "defaultValue": "/subscriptions/cc57cd42-dede-4674-b810-a0fbde41504a/resourceGroups/myRG/providers/Microsoft.Compute/disks/simple-vm_disk2_bd5d55bf385744c991218e690e35df13",
+            "type": "String"
         },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "MicrosoftWindowsServer",
-            "offer": "WindowsServer",
-            "sku": "2019-Datacenter-smalldisk",
-            "version": "latest"
-          },
-          "osDisk": {
-            "createOption": "FromImage"
-          }
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'myNIC')]"
-            }
-          ]
+        "networkInterfaces_myVMNic_externalid": {
+            "defaultValue": "/subscriptions/cc57cd42-dede-4674-b810-a0fbde41504a/resourceGroups/myRG/providers/Microsoft.Network/networkInterfaces/myVMNic",
+            "type": "String"
         }
-      }
-    }
-  ]
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2024-11-01",
+            "name": "[parameters('virtualMachines_simple_vm_name')]",
+            "location": "eastus",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_B1ls"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2022-datacenter-azure-edition",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Windows",
+                        "name": "[concat(parameters('virtualMachines_simple_vm_name'), '_OsDisk_1_aab1f024a6dc42aab4ea57395238018f')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "StandardSSD_LRS",
+                            "id": "[parameters('disks_simple_vm_OsDisk_1_aab1f024a6dc42aab4ea57395238018f_externalid')]"
+                        },
+                        "deleteOption": "Detach",
+                        "diskSizeGB": 127
+                    },
+                    "dataDisks": [
+                        {
+                            "lun": 0,
+                            "name": "[concat(parameters('virtualMachines_simple_vm_name'), '_disk2_bd5d55bf385744c991218e690e35df13')]",
+                            "createOption": "Empty",
+                            "caching": "None",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS",
+                                "id": "[parameters('disks_simple_vm_disk2_bd5d55bf385744c991218e690e35df13_externalid')]"
+                            },
+                            "deleteOption": "Detach",
+                            "diskSizeGB": 1023,
+                            "toBeDetached": false
+                        }
+                    ],
+                    "diskControllerType": "SCSI"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_simple_vm_name')]",
+                    "adminUsername": "atul",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true,
+                        "patchSettings": {
+                            "patchMode": "AutomaticByOS",
+                            "assessmentMode": "ImageDefault"
+                        }
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true,
+                    "requireGuestProvisionSignal": true
+                },
+                "securityProfile": {
+                    "uefiSettings": {
+                        "secureBootEnabled": true,
+                        "vTpmEnabled": true
+                    },
+                    "securityType": "TrustedLaunch"
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[parameters('networkInterfaces_myVMNic_externalid')]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "https://bootdiagsk3hfrs6t2obvs.blob.core.windows.net/"
+                    }
+                }
+            }
+        }
+    ]
 }
