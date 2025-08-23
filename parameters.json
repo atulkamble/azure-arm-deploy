@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adminUsername": {
+            "value": "atul"
+        },
+        "dnsNameForPublicIP": {
+            "value": "atulkamble00807996"
+        },
+        "ubuntuOSVersion": {
+            "value": "18.04-LTS"
+        },
+        "testPage": {
+            "value": "index.html"
+        },
+        "testPageTitle": {
+            "value": "Test Page"
+        },
+        "testPageBody": {
+            "value": "<p>This is a test page.</p>"
+        },
+        "installPHP": {
+            "value": true
+        },
+        "location": {
+            "value": "eastus"
+        },
+        "authenticationType": {
+            "value": "sshPublicKey"
+        },
+        "adminPasswordOrKey": {
+            "value": null
+        },
+        "vmSize": {
+            "value": "Standard_D2_v3"
+        }
+    }
+}
