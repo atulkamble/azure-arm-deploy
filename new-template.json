@@ -37,16 +37,6 @@
       "defaultValue": false,
       "metadata": { "description": "Set to True to install PHP." }
     },
-    "_artifactsLocation": {
-      "type": "string",
-      "metadata": { "description": "Base URI for artifacts. Not used now that script is inline." },
-      "defaultValue": "[deployment().properties.templateLink.uri]"
-    },
-    "_artifactsLocationSasToken": {
-      "type": "securestring",
-      "metadata": { "description": "SAS token for artifacts. Not used now that script is inline." },
-      "defaultValue": ""
-    },
     "location": {
       "type": "string",
       "defaultValue": "[resourceGroup().location]",
